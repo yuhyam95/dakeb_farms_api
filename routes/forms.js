@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 //NEW FORM
 router.post("/", async (req, res) => {
   const { name, description, createdBy, status, fields } = req.body;
-  const newForm = new Form(req.body);
+  const newForm = new Form({ name, description, createdBy, status, fields });
    try{
      const savedForm = await newForm.save(); 
       res.json(savedForm);

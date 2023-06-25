@@ -1,11 +1,24 @@
 const mongoose = require('mongoose');
 
 const newFormSchema = new mongoose.Schema({
-    name: String,
-    descriptiom: String,
-    createdBy: String,
-    status: String,
-    fields: [{ name: String, type: String }],          
+    name: {
+        type: String
+      },
+    descriptiom: {
+        type: String
+      },
+    createdBy: {
+        type: String
+      },
+    status: {
+        type: String
+      },
+    fields: [{ name: {
+        type: String
+      }, 
+      type: {
+        type: String
+      }}],          
   },
   
   {timestamps: true}
