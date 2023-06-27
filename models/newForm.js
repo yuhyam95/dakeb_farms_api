@@ -4,7 +4,7 @@ const newFormSchema = new mongoose.Schema({
     name: {
         type: String
       },
-    descriptiom: {
+    description: {
         type: String
       },
     createdBy: {
@@ -24,4 +24,14 @@ const newFormSchema = new mongoose.Schema({
   {timestamps: true}
   );
 
-module.exports = mongoose.model("newForm", newFormSchema);
+  const submissionSchema = new mongoose.Schema({
+    formId: { type: mongoose.Schema.Types.ObjectId, ref: 'Form' },
+    data: [{ field:  {
+      type: String
+    }, value:  {
+      type: String
+    } }],
+  });
+
+module.exports = mongoose.model("Form", newFormSchema);
+module.exports = mongoose.model("Submission", submissionSchema);

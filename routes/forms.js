@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Form = require('../models/newForm.js')
+const Submission = require('../models/newForm.js')
+
 
 //GET FORMS
 router.get('/', async (req, res) => {
@@ -65,8 +67,48 @@ router.patch('/:id', async (req, res) =>{
   }
 });
 
+// SUBMIT A FORM
+router.post('/forms/:formId/submit', async (req, res) => {
+  const formId = req.params.formId;
+  const data = req.body;
 
+  try {
+    const form = await Form.findById(formId);
+    if (!form) {
+      res.status(404).send('Form not found');
+      return;
+    }
 
+    const submission = new Submission({
+      formId: form._id,
+      data: data,
+    });
+    await submission.save();
+    res.status(201).send('Form submitted successfully');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error submitting form');
+  }
+});
+
+// GET FORM SUBMISSIONS
+router.get('/forms/:formId/submissions', async (req, res) => {
+  const formId = req.params.formId;
+
+  try {
+    const form = await Form.findById(formId);
+    if (!form) {
+      res.status(404).send('Form not found');
+      return;
+    }
+
+    const submissions = await Submission.find({ formId: form._id });
+    res.send(submissions);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving submissions');
+  }
+});
 
 
 
