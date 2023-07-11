@@ -4,10 +4,7 @@ const userSchema = new mongoose.Schema({
    name: {
      type: String
    },
-   position: {
-    type: String
-    },
-    email: {
+   email: {
         type: String
     },
     salary: {
@@ -16,9 +13,9 @@ const userSchema = new mongoose.Schema({
     phonenumber: {
         type: Number
       },
-    role: {
-        type: String
-      },
+    department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+    position: { type: mongoose.Schema.Types.ObjectId, ref: 'Position' },  
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Position' },
     usertype: {
         type: String
       },
