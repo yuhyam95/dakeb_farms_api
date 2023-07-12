@@ -19,20 +19,10 @@ const paySlipSchema = new mongoose.Schema({
    payperiod: {
         type: String
     }, 
-   user:[{
-        name:{
-          type: String
-        },
-        email: {
-            type: String
-        },
-        department:{
-          type: String
-        },
-        position:{
-            type: String
-          }
-       }]        
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },    
   },
   {timestamps: true}
   );

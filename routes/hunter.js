@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         res.json(getHunters)
     }
     catch(err){
-      res.json({message:err});
+      res.status(404).json({message:err});
     }
 });
 
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
     res.json(getHunter)
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 
@@ -44,25 +44,25 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) =>{
   try{ 
     const removeHunter = await Hunter.deleteOne({_id: req.params.id})
-    res.json(removeHunter)
+    res.json("Hunter Deleted")
   }
   catch(err){
-      res.json({message:err})
+      res.status(404).json({message:err})
   }
 });
 
 
  //UPDATE HUNTERs
-router.patch('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
   try{
     const updateHunter = await Hunter.updateOne(
       {_id: req.params.id}, 
       {$set: req.body}
     );
-    res.json(updateHunter)
+    res.json("Hunter Updated")
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 

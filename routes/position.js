@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
   const newPosition = new Position({ name });
    try{
      const savedPosition = await newPosition.save(); 
-      res.json(savedPosition);
+      res.json(`${savedPosition.name} created`);
     }
     catch(err) {
         res.json({message: err})
@@ -53,7 +53,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE POSITION
-router.patch('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
   try{
     const updatePosition = await Position.updateOne(
       {_id: req.params.id}, 
