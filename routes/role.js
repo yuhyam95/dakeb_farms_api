@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
     res.json(getRole)
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 
@@ -44,25 +44,25 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) =>{
   try{ 
     const removeRole = await Role.deleteOne({_id: req.params.id})
-    res.json(removeRole)
+    res.json("Role Deleted")
   }
   catch(err){
-      res.json({message:err})
+      res.status(404).json({message:err})
   }
 });
 
 
  //UPDATE ROLE
-router.patch('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
   try{
     const updateRole = await Role.updateOne(
       {_id: req.params.id}, 
       {$set: req.body}
     );
-    res.json(updateRole)
+    res.json("Role Updated")
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 

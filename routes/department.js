@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         res.json(getDepartments)
     }
     catch(err){
-      res.json({message:err});
+      res.status(404).json({message:err});
     }
 });
 
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
     res.json(getDepartment)
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 
@@ -44,25 +44,25 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) =>{
   try{ 
     const removeDepartment = await Department.deleteOne({_id: req.params.id})
-    res.json(removeDepartment)
+    res.json("Department Deleted")
   }
   catch(err){
-      res.json({message:err})
+      res.status(404).json({message:err})
   }
 });
 
 
  //UPDATE DEPARTMENT
-router.patch('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
   try{
     const updateDepartment = await Department.updateOne(
       {_id: req.params.id}, 
       {$set: req.body}
     );
-    res.json(updateDepartment)
+    res.json("Department Updated")
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 

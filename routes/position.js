@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
     res.json(getPosition)
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 
@@ -44,10 +44,10 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) =>{
   try{ 
     const removePosition = await Position.deleteOne({_id: req.params.id})
-    res.json(removePosition)
+    res.json("Position Deleted")
   }
   catch(err){
-      res.json({message:err})
+      res.status(404).json({message:err})
   }
 });
 
@@ -59,10 +59,10 @@ router.patch('/:id', async (req, res) =>{
       {_id: req.params.id}, 
       {$set: req.body}
     );
-    res.json(updatePosition)
+    res.json("Position Updated")
   }
   catch(err){
-    res.json({message:err})
+    res.status(404).json({message:err})
   }
 });
 
