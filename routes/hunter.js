@@ -20,10 +20,10 @@ router.post("/", async (req, res) => {
   const newHunter = new Hunter({ name, email, phonenumber, type, code });
    try{
      const savedHunter = await newHunter.save(); 
-      res.json(savedHunter);
+      res.status(201).json(savedHunter);
     }
     catch(err) {
-        res.json({message: err})
+        res.status(404).json({message: err})
     }
 });
 
