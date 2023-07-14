@@ -13,15 +13,12 @@ const reportSchema = new mongoose.Schema({
    status: {
         type: Boolean
     },
-   user:[{
-        name:{
-          type: String
-        },
-        department:{
-          type: String
-        }
-       }]        
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
+
   {timestamps: true}
   );
 

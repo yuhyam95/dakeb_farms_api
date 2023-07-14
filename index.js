@@ -21,6 +21,7 @@ const payslipRoute = require('./routes/payslip.js');
 const positionRoute = require('./routes/position.js');
 const reportRoute = require('./routes/report.js');
 const roleRoute = require('./routes/role.js');
+const userRoute = require('./routes/user.js');
 
 
 //middlewares 
@@ -32,6 +33,7 @@ app.use('/api/payslip', payslipRoute);
 app.use('/api/position', positionRoute);
 app.use('/api/report', reportRoute);
 app.use('/api/role', roleRoute);
+app.use('/api/user', userRoute);
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}...`));
 
