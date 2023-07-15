@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 
 //NEW POSITION
 router.post("/", async (req, res) => {
-  const { name } = req.body;
-  const newPosition = new Position({ name });
+  const { name, description } = req.body;
+  const newPosition = new Position({ name, description });
    try{
      const savedPosition = await newPosition.save(); 
       res.json(`${savedPosition.name} created`);

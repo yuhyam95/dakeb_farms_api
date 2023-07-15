@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 
 //NEW DEPARTMENT
 router.post("/", async (req, res) => {
-  const { name } = req.body;
-  const newDepartment = new Department({ name });
+  const { name, description } = req.body;
+  const newDepartment = new Department({ name, description });
    try{
      const savedDepartment = await newDepartment.save(); 
       res.json(savedDepartment);
