@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Report = require('../models/Report.js')
-
+const User = require('../models/User.js')
 
 //GET REPORTS
 router.get('/', async (req, res) => {
@@ -15,16 +15,30 @@ router.get('/', async (req, res) => {
 });
 
 //NEW REPORT
-router.post("/", async (req, res) => {
-  const { reportdetails, category, priority, status, user } = req.body;
-  const newReport = new Report({ reportdetails, category, priority, status, user });
-   try{
-     const savedReport = await newReport.save(); 
-      res.json(savedReport);
+router.post("/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const { reportdetails, category, priority, status } = req.body;
+  
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-    catch(err) {
-        res.json({message: err})
-    }
+
+    const newReport = new Report({
+      reportdetails,
+      category,
+      priority,
+      status,
+      submittedBy: user.name
+    });
+
+    const savedReport = await newReport.save();
+    res.status(201).json(savedReport);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 
@@ -44,7 +58,7 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) =>{
   try{ 
     const removeReport = await Report.deleteOne({_id: req.params.id})
-    res.json(removeReport)
+    res.json("Report deleted")
   }
   catch(err){
       res.json({message:err})
@@ -53,13 +67,13 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE REPORT
-router.patch('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
   try{
     const updateReport = await Report.updateOne(
       {_id: req.params.id}, 
       {$set: req.body}
     );
-    res.json(updateReport)
+    res.json("Report Updated")
   }
   catch(err){
     res.json({message:err})

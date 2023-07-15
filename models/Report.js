@@ -13,9 +13,8 @@ const reportSchema = new mongoose.Schema({
    status: {
         type: Boolean
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    submittedBy: {
+      type: String
     },
   },
 
