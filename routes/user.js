@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User.js')
+const Department = require('../models/Department.js')
+const Position = require('../models/Position.js')
+const Role = require('../models/Role.js')
+
 
 //GET USERS
 router.get('/', async (req, res) => {
@@ -17,21 +21,25 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { name, email, salary, phonenumber, departmentId, positionId, roleId, usertype, password } = req.body;
+    
+    const department = await Department.findById(departmentId);
+    const position = await Position.findById(positionId);
+    const role = await Role.findById(roleId);
 
     const user = new User({
       name,
       email, 
       salary, 
       phonenumber,
-      department: departmentId,
-      position: positionId,
-      role: roleId,
+      department: department.name,
+      position: position.name,
+      role: role.name,
       usertype,
       password
     });
 
     await user.save();
-    res.send('User created successfully');
+    res.send(user);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error creating user');
@@ -69,7 +77,7 @@ router.get('/:id', async (req, res) => {
         {_id: req.params.id}, 
         {$set: req.body}
       );
-      res.json("User Updated")
+      res.json(updateUser)
     }
     catch(err){
       res.status(404).json("Error updating user")
