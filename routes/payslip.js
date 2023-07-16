@@ -38,7 +38,7 @@ router.post("/:userId", async (req, res) => {
         email: user.email,
         department: user.department,
         position: user.position
-      },
+      }
     });
 
     const savedPayslip = await newPaySlip.save();

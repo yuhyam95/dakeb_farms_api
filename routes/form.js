@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const Form = require('../models/newForm.js')
-const Submission = require('../models/newForm.js')
-
+const Form = require('../models/Form.js')
+const Submission = require('../models/Submissions.js')
+const User = require('../models/User.js')
 
 //GET FORMS
 router.get('/', async (req, res) => {
     try{
        const getForms = await Form.find().sort({createdAt: -1});
-        res.json(getForm)
+        res.json(getForms)
     }
     catch(err){
       res.json({message:err});
@@ -16,16 +16,33 @@ router.get('/', async (req, res) => {
 });
 
 //NEW FORM
-router.post("/", async (req, res) => {
-  const { name, description, createdBy, status, fields } = req.body;
-  const newForm = new Form({ name, description, createdBy, status, fields });
-   try{
-     const savedForm = await newForm.save(); 
-      res.json(savedForm);
+router.post("/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const { name, description, status, fields } = req.body;
+  
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-    catch(err) {
-        res.json({message: err})
-    }
+
+  const newForm = new Form({ 
+    name, 
+    description, 
+    createdBy: {
+    name: user.name,
+    department: user.department,
+    position: user.position
+    }, 
+    status, 
+    fields });
+  
+    const savedForm = await newForm.save();
+    res.status(201).json(savedForm);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 
@@ -45,7 +62,7 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) =>{
   try{ 
     const removeForm = await Form.deleteOne({_id: req.params.id})
-    res.json(removeForm)
+    res.json("Form deleted")
   }
   catch(err){
       res.json({message:err})
@@ -54,13 +71,13 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE FORMs
-router.patch('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
   try{
     const updateForm = await Form.updateOne(
       {_id: req.params.id}, 
       {$set: req.body}
     );
-    res.json(updateForm)
+    res.json("Form Updated")
   }
   catch(err){
     res.json({message:err})
@@ -68,8 +85,9 @@ router.patch('/:id', async (req, res) =>{
 });
 
 // SUBMIT A FORM
-router.post('/forms/:formId/submit', async (req, res) => {
+router.post('/forms/:formId/:userId/submit', async (req, res) => {
   const formId = req.params.formId;
+  const user = req.params.userId;
   const data = req.body;
 
   try {
@@ -81,6 +99,11 @@ router.post('/forms/:formId/submit', async (req, res) => {
 
     const submission = new Submission({
       formId: form._id,
+      submittedBy:{
+        name: user.name,
+        department: user.department,
+        position: user.position
+      },
       data: data,
     });
     await submission.save();

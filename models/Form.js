@@ -8,7 +8,15 @@ const newFormSchema = new mongoose.Schema({
         type: String
       },
     createdBy: {
-        type: String
+        name: {
+          type: String
+        },
+        department: {
+          type: String
+        },
+        position: {
+          type: String
+        }
       },
     status: {
         type: String
@@ -24,14 +32,5 @@ const newFormSchema = new mongoose.Schema({
   {timestamps: true}
   );
 
-  const submissionSchema = new mongoose.Schema({
-    formId: { type: mongoose.Schema.Types.ObjectId, ref: 'Form' },
-    data: [{ field:  {
-      type: String
-    }, value:  {
-      type: String
-    } }],
-  });
-
+  
 module.exports = mongoose.model("Form", newFormSchema);
-module.exports = mongoose.model("Submission", submissionSchema);
