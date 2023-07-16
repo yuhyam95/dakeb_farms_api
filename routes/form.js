@@ -85,27 +85,38 @@ router.put('/:id', async (req, res) =>{
 });
 
 // SUBMIT A FORM
-router.post('/forms/:formId/:userId/submit', async (req, res) => {
+router.post('/:formId/:userId/submit', async (req, res) => {
   const formId = req.params.formId;
-  const user = req.params.userId;
+  const userId = req.params.userId;
   const data = req.body;
+
+  console.log('Received data:', data); 
+
 
   try {
     const form = await Form.findById(formId);
-    if (!form) {
-      res.status(404).send('Form not found');
+    const user = await User.findById(userId);
+    if (!form || !user) {
+      res.status(404).send('Form or User not found');
       return;
     }
 
+    const submissionData = data.data.map(({ field, value }) => ({
+      field: field,   
+      value: value,   
+    }));
+
     const submission = new Submission({
       formId: form._id,
+      formname: form.name,
       submittedBy:{
         name: user.name,
         department: user.department,
         position: user.position
       },
-      data: data,
+      data: submissionData,
     });
+
     await submission.save();
     res.status(201).send('Form submitted successfully');
   } catch (err) {
@@ -115,7 +126,7 @@ router.post('/forms/:formId/:userId/submit', async (req, res) => {
 });
 
 // GET FORM SUBMISSIONS
-router.get('/forms/:formId/submissions', async (req, res) => {
+router.get('/:formId/submissions', async (req, res) => {
   const formId = req.params.formId;
 
   try {
