@@ -3,9 +3,10 @@ const router = express.Router()
 const Form = require('../models/Form.js')
 const Submission = require('../models/Submissions.js')
 const User = require('../models/User.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 
 //GET FORMS
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
     try{
        const getForms = await Form.find().sort({createdAt: -1});
         res.json(getForms)

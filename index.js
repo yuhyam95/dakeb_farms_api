@@ -7,9 +7,10 @@ const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 
+
+
 //connect to database
 mongoose.connect(process.env.MONGO_URL)
-//mongoose.connect('mongodb://localhost/dakeb-farms-api')
 .then(() => console.log('Connected to database...'))
 .catch(err => console.error('Could not connect to database...', err));
 
@@ -36,7 +37,9 @@ app.use(
   
   app.use(passport.initialize());
   app.use(passport.session());
-
+  
+  const { isAuthenticated } = require('./middlewares/authMiddleWare');
+  
 //middlewares 
 app.use(express.json());
 app.use('/api/department', departmentRoute);
