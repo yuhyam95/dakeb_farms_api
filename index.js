@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 require('dotenv/config');
 const cors = require("cors");
 const path = require('path');
-
+const session = require('express-session');
+const passport = require('passport');
 
 //connect to database
 mongoose.connect(process.env.MONGO_URL)
@@ -22,7 +23,19 @@ const positionRoute = require('./routes/position.js');
 const reportRoute = require('./routes/report.js');
 const roleRoute = require('./routes/role.js');
 const userRoute = require('./routes/user.js');
+const authRoute = require('./routes/auth.js')
 
+app.use(
+    session({
+      secret: process.env.SECRET_KEY,
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
+  
+  
+  app.use(passport.initialize());
+  app.use(passport.session());
 
 //middlewares 
 app.use(express.json());
@@ -34,6 +47,8 @@ app.use('/api/position', positionRoute);
 app.use('/api/report', reportRoute);
 app.use('/api/role', roleRoute);
 app.use('/api/user', userRoute);
+app.use('/api/auth', authRoute);
+
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}...`));
 
