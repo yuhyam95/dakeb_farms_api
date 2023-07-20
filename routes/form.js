@@ -4,20 +4,25 @@ const Form = require('../models/Form.js')
 const Submission = require('../models/Submissions.js')
 const User = require('../models/User.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkOwnership } = require('../middlewares/checkOwnership.js');
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
+
 
 //GET FORMS
-router.get('/', isAuthenticated, async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('forms'), async (req, res) => {
     try{
+      console.log('Executing route handler');
        const getForms = await Form.find().sort({createdAt: -1});
         res.json(getForms)
     }
     catch(err){
+      console.error('Error in route handler:', err);
       res.json({message:err});
     }
 });
 
 //NEW FORM
-router.post("/:userId", async (req, res) => {
+router.post("/:userId", isAuthenticated, checkPermissions, async (req, res) => {
   const userId = req.params.userId;
   const { name, description, status, fields } = req.body;
   
