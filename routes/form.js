@@ -11,7 +11,6 @@ const { checkPermissions } = require('../middlewares/checkPermissions.js');
 //GET FORMS
 router.get('/', isAuthenticated, checkPermissions('forms'), async (req, res) => {
     try{
-      console.log('Executing route handler');
        const getForms = await Form.find().sort({createdAt: -1});
         res.json(getForms)
     }
@@ -22,7 +21,7 @@ router.get('/', isAuthenticated, checkPermissions('forms'), async (req, res) => 
 });
 
 //NEW FORM
-router.post("/:userId", isAuthenticated, checkPermissions, async (req, res) => {
+router.post("/:userId", isAuthenticated, checkPermissions('forms'), async (req, res) => {
   const userId = req.params.userId;
   const { name, description, status, fields } = req.body;
   
@@ -53,7 +52,7 @@ router.post("/:userId", isAuthenticated, checkPermissions, async (req, res) => {
 
 
 //GET SPECIFIC FORM
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, async (req, res) => {
   try{
     const getForm = await Form.findOne({ _id: req.params.id });
     res.json(getForm)
@@ -65,7 +64,7 @@ router.get('/:id', async (req, res) => {
 
 
 //DELETE FORM
-router.delete('/:id', async (req, res) =>{
+router.delete('/:id',isAuthenticated, checkPermissions('forms'), async (req, res) =>{
   try{ 
     const removeForm = await Form.deleteOne({_id: req.params.id})
     res.json("Form deleted")
@@ -77,7 +76,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE FORMs
-router.put('/:id', async (req, res) =>{
+router.put('/:id', isAuthenticated, checkPermissions('forms'), async (req, res) =>{
   try{
     const updateForm = await Form.updateOne(
       {_id: req.params.id}, 
@@ -91,7 +90,7 @@ router.put('/:id', async (req, res) =>{
 });
 
 // SUBMIT A FORM
-router.post('/:formId/:userId/submit', async (req, res) => {
+router.post('/:formId/:userId/submit', isAuthenticated, checkPermissions('forms'), async (req, res) => {
   const formId = req.params.formId;
   const userId = req.params.userId;
   const data = req.body;
@@ -132,7 +131,7 @@ router.post('/:formId/:userId/submit', async (req, res) => {
 });
 
 // GET FORM SUBMISSIONS
-router.get('/:formId/submissions', async (req, res) => {
+router.get('/:formId/submissions', isAuthenticated, checkPermissions('forms'), async (req, res) => {
   const formId = req.params.formId;
 
   try {

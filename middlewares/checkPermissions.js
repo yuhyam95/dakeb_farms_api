@@ -1,21 +1,21 @@
 
 const roles = {
   Admin: {
-    users: ['create', 'read', 'update', 'delete'],
-    reports: ['create', 'read', 'update', 'delete'],
-    payslips: ['create', 'read', 'update', 'delete'],
-    hunters: ['create', 'read', 'update', 'delete'],
-    forms: ['create', 'get', 'update', 'delete'],
-    departments: ['create', 'read', 'update', 'delete'],
-    positions: ['create', 'read', 'update', 'delete'],
-    roles: ['create', 'read', 'update', 'delete'] 
+    users: ['post', 'get', 'put', 'delete'],
+    reports: ['post', 'get', 'put', 'delete'],
+    payslips: ['post', 'get', 'put', 'delete'],
+    hunters: ['post', 'get', 'put', 'delete'],
+    forms: ['post', 'get', 'put', 'delete'],
+    departments: ['post', 'get', 'put', 'delete'],
+    positions: ['post', 'get', 'put', 'delete'],
+    roles: ['post', 'get', 'put', 'delete'] 
   },
   
   User: {
-    reports: ['create', 'read', 'update', 'delete'],
-    payslips: ['read'],
-    hunters: ['create', 'read', 'update', 'delete'],
-    forms: ['create', 'read', 'update', 'delete']
+    reports: ['post', 'get', 'put', 'delete'],
+    payslips: ['get'],
+    hunters: ['post', 'get', 'put', 'delete'],
+    forms: ['post', 'get', 'put',]
   },
 };
 
