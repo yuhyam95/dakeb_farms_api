@@ -31,6 +31,7 @@ app.use(
       secret: process.env.SECRET_KEY,
       resave: false,
       saveUninitialized: false,
+      expires: new Date(Date.now() + (3600000 * 24)),expires: new Date(Date.now() + (3600000 * 24)), // Session will expire after 24 hours of inactivity
     })
   );
   
