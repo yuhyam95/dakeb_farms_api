@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Position = require('../models/Position.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
 
 //GET POSITIONS
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('positions'), async (req, res) => {
     try{
        const getPositions = await Position.find().sort({createdAt: -1});
         res.json(getPositions)
@@ -15,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 //NEW POSITION
-router.post("/", async (req, res) => {
+router.post("/", isAuthenticated, checkPermissions('positions'), async (req, res) => {
   const { name, description } = req.body;
   const newPosition = new Position({ name, description });
    try{
@@ -29,7 +31,7 @@ router.post("/", async (req, res) => {
 
 
 //GET SPECIFIC POSITION
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, checkPermissions('positions'), async (req, res) => {
   try{
     const getPosition = await Position.findOne({ _id: req.params.id });
     res.json(getPosition)
@@ -41,7 +43,7 @@ router.get('/:id', async (req, res) => {
 
 
 //DELETE POSITION
-router.delete('/:id', async (req, res) =>{
+router.delete('/:id', isAuthenticated, checkPermissions('positions'), async (req, res) =>{
   try{ 
     const removePosition = await Position.deleteOne({_id: req.params.id})
     res.json("Position Deleted")
@@ -53,7 +55,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE POSITION
-router.put('/:id', async (req, res) =>{
+router.put('/:id', isAuthenticated, checkPermissions('positions'), async (req, res) =>{
   try{
     const updatePosition = await Position.updateOne(
       {_id: req.params.id}, 

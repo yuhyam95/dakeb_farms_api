@@ -2,9 +2,12 @@ const express = require('express')
 const router = express.Router()
 const Report = require('../models/Report.js')
 const User = require('../models/User.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
+
 
 //GET REPORTS
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('reports'), async (req, res) => {
     try{
        const getReports = await Report.find().sort({createdAt: -1});
         res.json(getReports)
@@ -15,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 //NEW REPORT
-router.post("/:userId", async (req, res) => {
+router.post("/:userId", isAuthenticated, checkPermissions('reports'), async (req, res) => {
   const userId = req.params.userId;
   const { reportdetails, category, priority, status } = req.body;
   
@@ -43,7 +46,7 @@ router.post("/:userId", async (req, res) => {
 
 
 //GET SPECIFIC REPORT
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, checkPermissions('reports'), async (req, res) => {
   try{
     const getReport = await Report.findOne({ _id: req.params.id });
     res.json(getReport)
@@ -55,7 +58,7 @@ router.get('/:id', async (req, res) => {
 
 
 //DELETE REPORT
-router.delete('/:id', async (req, res) =>{
+router.delete('/:id', isAuthenticated, checkPermissions('reports'), async (req, res) =>{
   try{ 
     const removeReport = await Report.deleteOne({_id: req.params.id})
     res.json("Report deleted")
@@ -67,7 +70,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE REPORT
-router.put('/:id', async (req, res) =>{
+router.put('/:id', isAuthenticated, checkPermissions('reports'), async (req, res) =>{
   try{
     const updateReport = await Report.updateOne(
       {_id: req.params.id}, 

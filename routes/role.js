@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Role = require('../models/Role.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
 
 //GET ROLES
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('roles'), async (req, res) => {
     try{
        const getRoles = await Role.find().sort({createdAt: -1});
         res.json(getRoles)
@@ -15,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 //NEW ROLE
-router.post("/", async (req, res) => {
+router.post("/", isAuthenticated, checkPermissions('roles'), async (req, res) => {
   const { name, description, permissions } = req.body;
   const newRole = new Role({ name, description, permissions });
    try{
@@ -29,7 +31,7 @@ router.post("/", async (req, res) => {
 
 
 //GET SPECIFIC ROLE
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, checkPermissions('roles'), async (req, res) => {
   try{
     const getRole = await Role.findOne({ _id: req.params.id });
     res.json(getRole)
@@ -41,7 +43,7 @@ router.get('/:id', async (req, res) => {
 
 
 //DELETE ROLE
-router.delete('/:id', async (req, res) =>{
+router.delete('/:id', isAuthenticated, checkPermissions('roles'), async (req, res) =>{
   try{ 
     const removeRole = await Role.deleteOne({_id: req.params.id})
     res.json("Role Deleted")
@@ -53,7 +55,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE ROLE
-router.put('/:id', async (req, res) =>{
+router.put('/:id', isAuthenticated, checkPermissions('roles'), async (req, res) =>{
   try{
     const updateRole = await Role.updateOne(
       {_id: req.params.id}, 

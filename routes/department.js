@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Department = require('../models/Department.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
 
 //GET DEPARTMENTS
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('departments'), async (req, res) => {
     try{
        const getDepartments = await Department.find().sort({createdAt: -1});
         res.json(getDepartments)
@@ -15,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 //NEW DEPARTMENT
-router.post("/", async (req, res) => {
+router.post("/", isAuthenticated, checkPermissions('departments'), async (req, res) => {
   const { name, description } = req.body;
   const newDepartment = new Department({ name, description });
    try{
@@ -29,7 +31,7 @@ router.post("/", async (req, res) => {
 
 
 //GET SPECIFIC DEPARTMENT
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, checkPermissions('departments'), async (req, res) => {
   try{
     const getDepartment = await Department.findOne({ _id: req.params.id });
     res.json(getDepartment)
@@ -41,7 +43,7 @@ router.get('/:id', async (req, res) => {
 
 
 //DELETE DEPARTMENT
-router.delete('/:id', async (req, res) =>{
+router.delete('/:id', isAuthenticated, checkPermissions('departments'), async (req, res) =>{
   try{ 
     const removeDepartment = await Department.deleteOne({_id: req.params.id})
     res.json("Department Deleted")
@@ -53,7 +55,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE DEPARTMENT
-router.put('/:id', async (req, res) =>{
+router.put('/:id', isAuthenticated, checkPermissions('departments'), async (req, res) =>{
   try{
     const updateDepartment = await Department.updateOne(
       {_id: req.params.id}, 

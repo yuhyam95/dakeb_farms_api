@@ -4,10 +4,12 @@ const User = require('../models/User.js')
 const Department = require('../models/Department.js')
 const Position = require('../models/Position.js')
 const Role = require('../models/Role.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
 
 //GET USERS
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('users'), async (req, res) => {
     try{
        const getUsers = await User.find().sort({createdAt: -1});
         res.json(getUsers)
@@ -18,7 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // CREATE A NEW USER
-router.post('/', async (req, res) => {
+router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) => {
   try {
     const { name, email, salary, phonenumber, departmentId, positionId, roleId, usertype, password } = req.body;
     
@@ -47,7 +49,7 @@ router.post('/', async (req, res) => {
 });
 
 //GET SPECIFIC USER
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, checkPermissions('users'), async (req, res) => {
     try{
       const getUser = await User.findOne({ _id: req.params.id });
       res.json(getUser)
@@ -59,7 +61,7 @@ router.get('/:id', async (req, res) => {
   
   
   //DELETE USER
-  router.delete('/:id', async (req, res) =>{
+  router.delete('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
     try{ 
       const removeUser = await User.deleteOne({_id: req.params.id})
       res.json("User Deleted")
@@ -71,7 +73,7 @@ router.get('/:id', async (req, res) => {
   
   
    //UPDATE USER
-  router.put('/:id', async (req, res) =>{
+  router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
     try{
       const updateUser = await User.updateOne(
         {_id: req.params.id}, 

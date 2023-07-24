@@ -15,7 +15,10 @@ const roles = {
     reports: ['post', 'get', 'put', 'delete'],
     payslips: ['get'],
     hunters: ['post', 'get', 'put', 'delete'],
-    forms: ['post', 'get', 'put',]
+    forms: ['post', 'get', 'put'],
+    departments: ['get'],
+    positions: ['get'],
+    roles: ['get']
   },
 };
 

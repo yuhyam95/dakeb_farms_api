@@ -2,9 +2,12 @@ const express = require('express')
 const router = express.Router()
 const PaySlip = require('../models/PaySlip.js')
 const User = require('../models/User.js')
+const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
+const { checkPermissions } = require('../middlewares/checkPermissions.js');
+
 
 //GET PAYSLIPS
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, checkPermissions('payslips'), async (req, res) => {
     try{
        const getPaySlips = await PaySlip.find().sort({createdAt: -1});
         res.json(getPaySlips)
@@ -15,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 //NEW PAYSLIP
-router.post("/:userId", async (req, res) => {
+router.post("/:userId", isAuthenticated, checkPermissions('payslips'), async (req, res) => {
   const { salary, bonus, deductions, reasonfordeductions, generatedby, payperiod } = req.body;
   const userId = req.params.userId;
 
@@ -51,7 +54,7 @@ router.post("/:userId", async (req, res) => {
 
 
 //GET SPECIFIC PAYSLIP
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, checkPermissions('payslips'), async (req, res) => {
   try{
     const getPaySlip = await PaySlip.findOne({ _id: req.params.id });
     res.json(getPaySlip)
@@ -63,7 +66,7 @@ router.get('/:id', async (req, res) => {
 
 
 //DELETE PAYSLIP
-router.delete('/:id', async (req, res) =>{
+router.delete('/:id', isAuthenticated, checkPermissions('payslips'), async (req, res) =>{
   try{ 
     const removePaySlip = await PaySlip.deleteOne({_id: req.params.id})
     res.json("Payslip Deleted")
@@ -75,7 +78,7 @@ router.delete('/:id', async (req, res) =>{
 
 
  //UPDATE PAYSLIPs
-router.put('/:id', async (req, res) =>{
+router.put('/:id', isAuthenticated, checkPermissions('payslips'), async (req, res) =>{
   try{
     const updatePaySlip = await PaySlip.updateOne(
       {_id: req.params.id}, 
