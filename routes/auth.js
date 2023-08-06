@@ -66,7 +66,19 @@ router.post('/login', (req, res, next) => {
       }
 
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
-      return res.json({ message: 'Login successful', token });
+       // Include user details in the response
+       const userDetails = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        department: user.department,
+        position: user.position,
+        role: user.role,
+        salary: user.salary,
+        phonenumber: user.phonenumber
+
+      };
+      return res.json({ message: 'Login successful', token, user: userDetails });
     });
   })(req, res, next);
 });
