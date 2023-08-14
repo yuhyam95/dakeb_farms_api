@@ -16,6 +16,15 @@ mongoose.connect(process.env.MONGO_URL)
 
 //routes
 app.use(cors());
+
+const corsOptions = {
+  origin: 'https://https://dakeb-web.vercel.app/', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, 
+};
+
+app.use(cors(corsOptions));
+
 const departmentRoute = require('./routes/department.js');
 const formsRoute = require('./routes/form.js');
 const hunterRoute = require('./routes/hunter.js');
