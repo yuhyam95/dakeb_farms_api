@@ -65,7 +65,7 @@ router.post('/login', (req, res, next) => {
         return next(err);
       }
 
-      const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
+      const token = jwt.sign({ userId: user._id, role: user.role }, process.env.SECRET_KEY);
        // Include user details in the response
        const userDetails = {
         _id: user._id,

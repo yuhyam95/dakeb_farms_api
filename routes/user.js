@@ -6,6 +6,7 @@ const Position = require('../models/Position.js')
 const Role = require('../models/Role.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 const { checkPermissions } = require('../middlewares/checkPermissions.js');
+//const {authenticateJWT} = require('../middlewares/authenticateJWT.js')
 
 
 //GET USERS
