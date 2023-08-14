@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URL)
 app.use(cors());
 
 const corsOptions = {
-  origin: 'https://https://dakeb-web.vercel.app/', 
+  origin: 'http://localhost:5173', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, 
 };
