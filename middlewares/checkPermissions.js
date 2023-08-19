@@ -1,4 +1,3 @@
-
 const roles = {
   Admin: {
     users: ['post', 'get', 'put', 'delete'],

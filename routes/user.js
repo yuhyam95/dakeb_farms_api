@@ -6,9 +6,19 @@ const Position = require('../models/Position.js')
 const Role = require('../models/Role.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 const { checkPermissions } = require('../middlewares/checkPermissions.js');
-//const {authenticateJWT} = require('../middlewares/authenticateJWT.js')
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-
+function generateRandomPassword(length) {
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset.charAt(randomIndex);
+  }
+  return password;
+}
+ 
 //GET USERS
 router.get('/', isAuthenticated, checkPermissions('users'), async (req, res) => {
     try{
@@ -23,11 +33,20 @@ router.get('/', isAuthenticated, checkPermissions('users'), async (req, res) => 
 // CREATE A NEW USER
 router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) => {
   try {
-    const { name, email, salary, phonenumber, departmentId, positionId, roleId, usertype, password } = req.body;
-    
+    const { name, email, salary, phonenumber, departmentId, positionId, roleId, usertype } = req.body;
+
     const department = await Department.findById(departmentId);
     const position = await Position.findById(positionId);
     const role = await Role.findById(roleId);
+    
+    // Check if the email is unique
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).send('Email already exists');
+    }
+
+    const password = generateRandomPassword(8);
+    console.log(`password: ${password}`);
 
     const user = new User({
       name,
@@ -42,6 +61,17 @@ router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) =>
     });
 
     await user.save();
+    
+    const msg = {
+      to: user.email,
+      from: 'info@dakebfarms.com.ng', 
+      subject: 'Welcome to Dakeb Farms',
+      text: `Your password is: ${password}`,
+    };
+
+    await sgMail.send(msg);
+
+
     res.send(user);
   } catch (err) {
     console.error(err);
