@@ -7,7 +7,6 @@ const Role = require('../models/Role.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 const { checkPermissions } = require('../middlewares/checkPermissions.js');
 const sgMail = require('@sendgrid/mail');
-const crypto = require('crypto');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function generateRandomPassword(length) {
@@ -21,8 +20,10 @@ function generateRandomPassword(length) {
 }
  
 function generateResetToken() {
-  const token = crypto.randomBytes(4).toString('hex');
-  return token;
+  const min = 1000; 
+  const max = 9999; 
+  const token = Math.floor(Math.random() * (max - min + 1)) + min;
+  return token.toString(); 
 }
 
 //GET USERS
@@ -131,7 +132,7 @@ router.post('/reset-password-request', async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    // Generate a reset token and set the expiration time (e.g., 1 hour from now)
+    
     const resetToken = generateResetToken();
     user.resetToken = resetToken;
     user.resetTokenExpires = Date.now() + 3600000; // 1 hour
@@ -155,6 +156,7 @@ router.post('/reset-password-request', async (req, res) => {
   }
 });
 
+//RESET PASSWORD
 router.post('/reset-password', async (req, res) => {
   try {
     const { email, token, newPassword } = req.body;
