@@ -7,7 +7,7 @@ const Role = require('../models/Role.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 const { checkPermissions } = require('../middlewares/checkPermissions.js');
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY); 
 
 function generateRandomPassword(length) {
   const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
