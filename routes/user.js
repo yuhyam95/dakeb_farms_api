@@ -52,6 +52,7 @@ router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) =>
     }
 
     const password = generateRandomPassword(8);
+    console.log(password)
 
     const user = new User({
       name,
@@ -60,7 +61,10 @@ router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) =>
       phonenumber,
       department: department.name,
       position: position.name,
-      role: role.name,
+      role: {
+        id: role._id,
+        name: role.name
+      },
       password
     });
 
