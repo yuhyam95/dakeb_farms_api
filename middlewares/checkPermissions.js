@@ -21,29 +21,6 @@ const roles = {
   },
 };
 
-//Middleware to check user's roles and permissions for a resource
-// const checkPermissions = (resource) => (req, res, next) => {
-//   console.log("Checking Permissions....");
-//   const userRole = req.user.role;
-//   const userPermissions = roles[userRole];
-//   const resourcePermissions = userPermissions[resource];
-
-//   if (!resourcePermissions) {
-//     return res.status(403).json({ message: 'Unauthorized - Insufficient permissions' });
-//   }
-
-//   const action = req.method.toLowerCase(); // Get the HTTP method (e.g., 'get', 'post', 'put', 'delete')
-//   if (!resourcePermissions.includes(action)) {
-//     return res.status(403).json({ message: 'Unauthorized - Insufficient permissions' });
-//   }
-
-//   return next();
-// };
-  
-// module.exports = {
-//   checkPermissions,
-// };
-
 const checkPermissions = (resource) => (req, res, next) => {
   console.log("Checking Permissions....");
   //const userRole = req.user.role; // Get the user role from JWT payload
