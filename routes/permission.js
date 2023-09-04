@@ -6,7 +6,7 @@ const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
 
 //GET PERMISSIONS
-router.get('/', isAuthenticated, checkPermissions('permissions'), async (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
     try{
        const getPermissions = await Permission.find().sort({createdAt: -1});
         res.json(getPermissions)
