@@ -34,6 +34,7 @@ const reportRoute = require('./routes/report.js');
 const roleRoute = require('./routes/role.js');
 const userRoute = require('./routes/user.js');
 const authRoute = require('./routes/auth.js')
+const permissionRoute = require('./routes/permission.js')
 
 app.use(
     session({
@@ -48,7 +49,6 @@ app.use(
   app.use(passport.initialize());
   app.use(passport.session());
   
-  const { isAuthenticated } = require('./middlewares/authMiddleWare');
   
 //middlewares 
 app.use(express.json());
@@ -61,7 +61,7 @@ app.use('/api/report', reportRoute);
 app.use('/api/role', roleRoute);
 app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
-
+app.use('/api/permission', permissionRoute)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}...`));
 
