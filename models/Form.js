@@ -17,8 +17,14 @@ const newFormSchema = new mongoose.Schema({
         position: {
           type: String
         }
-      },
+      }, 
     status: {
+        type: String
+      },
+    priority: {
+        type: String
+      },
+    sentTo: {
         type: String
       },
     fields: [{ name: {

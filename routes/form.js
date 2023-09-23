@@ -23,7 +23,7 @@ router.get('/', isAuthenticated, checkPermissions('forms'), async (req, res) => 
 //NEW FORM
 router.post("/:userId", isAuthenticated, checkPermissions('forms'), async (req, res) => {
   const userId = req.params.userId;
-  const { name, description, status, fields } = req.body;
+  const { name, description, status, fields, sentTo } = req.body;
   
   try {
     const user = await User.findById(userId);
@@ -38,9 +38,14 @@ router.post("/:userId", isAuthenticated, checkPermissions('forms'), async (req, 
     createdBy: {
     name: user.name,
     department: user.department,
-    position: user.position
+    position: user.position,
+    phonenumber: user.phonenumber,
+    salary: user.salary,
+    email: user.email,
+    datejoined: user.createdAt
     }, 
-    status, 
+    status,
+    sentTo, 
     fields });
   
     const savedForm = await newForm.save();
