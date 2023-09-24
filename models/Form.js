@@ -16,6 +16,18 @@ const newFormSchema = new mongoose.Schema({
         },
         position: {
           type: String
+        },
+        phonenumber: {
+          type: String
+        },
+        salary: {
+          type: String
+        },
+        email: {
+          type: String
+        },
+        datejoined: {
+          type: String
         }
       }, 
     status: {

@@ -14,7 +14,18 @@ const reportSchema = new mongoose.Schema({
         type: Boolean
     },
     submittedBy: {
-      type: String
+      name: {
+        type: String
+      },
+      department: {
+        type: String
+      },
+      position: {
+        type: String
+      },
+      email: {
+        type: String
+      }
     },
     sentTo: {
       type: String
