@@ -20,7 +20,7 @@ router.get('/', isAuthenticated, checkPermissions('reports'), async (req, res) =
 //NEW REPORT
 router.post("/:userId", isAuthenticated, checkPermissions('reports'), async (req, res) => {
   const userId = req.params.userId;
-  const { reportdetails, category, priority, status } = req.body;
+  const { reportdetails, category, priority, status, sentTo } = req.body;
   
   try {
     const user = await User.findById(userId);
@@ -34,7 +34,13 @@ router.post("/:userId", isAuthenticated, checkPermissions('reports'), async (req
       category,
       priority,
       status,
-      submittedBy: user.name
+      sentTo,
+      submittedBy: {
+        name: user.name,
+        department: user.department,
+        position: user.position,
+        email: user.email,
+        }
     });
 
     const savedReport = await newReport.save();

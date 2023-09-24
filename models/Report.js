@@ -16,6 +16,9 @@ const reportSchema = new mongoose.Schema({
     submittedBy: {
       type: String
     },
+    sentTo: {
+      type: String
+    },
   },
 
   {timestamps: true}
