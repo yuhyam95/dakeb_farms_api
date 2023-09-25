@@ -31,7 +31,10 @@ const paySlipSchema = new mongoose.Schema({
       },
       position: {
         type: String
-      }
+      },
+      phonenumber: {
+         type: String
+      } 
     },    
   },
   {timestamps: true}
