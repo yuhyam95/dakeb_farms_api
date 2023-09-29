@@ -124,6 +124,7 @@ router.get('/:id', isAuthenticated, checkPermissions('users'), async (req, res) 
   //     res.status(404).json("Error updating user")
   //   }
   // });
+  
 // UPDATE USER
 router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) => {
   try {
@@ -152,6 +153,7 @@ router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) 
 
     if (roleId) {
       const role = await Role.findById(roleId);
+      console.log(role)
       if (!role) {
         return res.status(400).json({ error: 'Invalid role ID' });
       }
