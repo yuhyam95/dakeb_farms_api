@@ -80,7 +80,7 @@ router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) =>
     await sgMail.send(msg);
 
 
-    res.send(user);
+    res.send("User Created successfully");
   } catch (err) {
     console.error(err);
     res.status(500).send('Error creating user');

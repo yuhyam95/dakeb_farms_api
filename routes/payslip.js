@@ -40,7 +40,8 @@ router.post("/:userId", isAuthenticated, checkPermissions('payslips'), async (re
         name: user.name,
         email: user.email,
         department: user.department,
-        position: user.position
+        position: user.position,
+        phonenumber: user.phonenumber
       }
     });
 
