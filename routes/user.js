@@ -111,19 +111,69 @@ router.get('/:id', isAuthenticated, checkPermissions('users'), async (req, res) 
   });
   
   
-   //UPDATE USER
-  router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
-    try{
-      const updateUser = await User.updateOne(
-        {_id: req.params.id}, 
-        {$set: req.body}
-      );
-      res.json(updateUser)
+  //  //UPDATE USER
+  // router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
+  //   try{
+  //     const updateUser = await User.updateOne(
+  //       {_id: req.params.id}, 
+  //       {$set: req.body}
+  //     );
+  //     res.json(updateUser)
+  //   }
+  //   catch(err){
+  //     res.status(404).json("Error updating user")
+  //   }
+  // });
+// UPDATE USER
+router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) => {
+  try {
+    const { name, email, salary, phonenumber, departmentId, positionId, roleId } = req.body;
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-    catch(err){
-      res.status(404).json("Error updating user")
+
+    if (departmentId) {
+      const department = await Department.findById(departmentId);
+      if (!department) {
+        return res.status(400).json({ error: 'Invalid department ID' });
+      }
+      user.department = department.name;
     }
-  });
+
+    if (positionId) {
+      const position = await Position.findById(positionId);
+      if (!position) {
+        return res.status(400).json({ error: 'Invalid position ID' });
+      }
+      user.position = position.name;
+    }
+
+    if (roleId) {
+      const role = await Role.findById(roleId);
+      if (!role) {
+        return res.status(400).json({ error: 'Invalid role ID' });
+      }
+      user.role = {
+        id: role._id,
+        name: role.name
+      };
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (salary) user.salary = salary;
+    if (phonenumber) user.phonenumber = phonenumber;
+
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error updating user' });
+  }
+});
 
 //PASSWORD RESET REQUEST
 router.post('/reset-password-request', async (req, res) => {
