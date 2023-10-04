@@ -18,8 +18,8 @@ router.get('/', isAuthenticated, checkPermissions('positions'), async (req, res)
 
 //NEW POSITION
 router.post("/", isAuthenticated, checkPermissions('positions'), async (req, res) => {
-  const { name, description } = req.body;
-  const newPosition = new Position({ name, description });
+  const { name, description, status } = req.body;
+  const newPosition = new Position({ name, status, description,  });
    try{
      const savedPosition = await newPosition.save(); 
       res.json(`${savedPosition.name} created`);
