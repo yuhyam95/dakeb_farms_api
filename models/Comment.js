@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema({
     name: {
       type: String
     },
-    role: {
+    position: {
       type: String
     }
   }

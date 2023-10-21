@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Report = require('../models/Report.js')
 const User = require('../models/User.js')
+const Comment = require('../models/Comment.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
@@ -93,14 +94,14 @@ router.post('/:reportId/comment', isAuthenticated, async (req, res) => {
   try {
     const reportId = req.params.reportId;
     const { text } = req.body;
-    const userId = req.user._id;
+    const userId = req.userId;
     const user = await User.findById(userId);
-
+    
     const newComment = new Comment({
       text,
       author: {
        name: user.name,
-       role: user.role 
+       position: user.position 
       }
     });
 
@@ -110,8 +111,24 @@ router.post('/:reportId/comment', isAuthenticated, async (req, res) => {
 
     res.json(comment);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add comment' });
+    console.log(error)
+    // res.status(500).json({ error: 'Failed to add comment' });
   }
 });
+
+// Endpoint to get comments for a specific report
+router.get('/:reportId/comments', async (req, res) => {
+  try {
+    const reportId = req.params.reportId;
+    const report = await Report.findById(reportId).populate('comments');
+    if (!report) {
+      return res.status(404).json({ error: 'Report not found' });
+    }
+    res.json(report.comments);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve comments' });
+  }
+});
+
 
 module.exports = router;

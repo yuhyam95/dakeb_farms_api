@@ -34,7 +34,6 @@ const isAuthenticated = (req, res, next) => {
     console.log('Decoded JWT:', decoded);
     req.userId = decoded.userId;
     req.userRole = decoded.role;
-    console.log(req.userRole)
     next();
   });
 };
