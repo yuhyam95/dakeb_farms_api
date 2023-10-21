@@ -89,4 +89,29 @@ router.put('/:id', isAuthenticated, checkPermissions('reports'), async (req, res
   }
 });
 
+router.post('/:reportId/comment', isAuthenticated, async (req, res) => {
+  try {
+    const reportId = req.params.reportId;
+    const { text } = req.body;
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    const newComment = new Comment({
+      text,
+      author: {
+       name: user.name,
+       role: user.role 
+      }
+    });
+
+    const comment = await newComment.save();
+
+    await Report.findByIdAndUpdate(reportId, { $push: { comments: comment._id } });
+
+    res.json(comment);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add comment' });
+  }
+});
+
 module.exports = router;
