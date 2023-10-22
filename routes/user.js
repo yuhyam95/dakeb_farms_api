@@ -100,15 +100,15 @@ router.get('/:id', isAuthenticated, checkPermissions('users'), async (req, res) 
   
   
   //DELETE USER
-  router.delete('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
-    try{ 
-      const removeUser = await User.deleteOne({_id: req.params.id})
-      res.json("User Deleted")
-    }
-    catch(err){
-        res.status(404).json('Error deleting user')
-    }
-  });
+  // router.delete('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
+  //   try{ 
+  //     const removeUser = await User.deleteOne({_id: req.params.id})
+  //     res.json("User Deleted")
+  //   }
+  //   catch(err){
+  //       res.status(404).json('Error deleting user')
+  //   }
+  // });
   
 
 // UPDATE USER
