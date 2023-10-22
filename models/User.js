@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
       id: {type: String},
       name: {type: String}
      },
+    status: {type: String},
     password: {
         type: String,
       },      

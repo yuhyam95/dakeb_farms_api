@@ -52,7 +52,6 @@ router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) =>
     }
 
     const password = generateRandomPassword(8);
-    console.log(password)
 
     const user = new User({
       name,

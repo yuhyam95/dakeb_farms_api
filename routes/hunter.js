@@ -4,6 +4,12 @@ const Hunter = require('../models/Hunter.js')
 const { isAuthenticated } = require('../middlewares/authMiddleWare.js')
 const { checkPermissions } = require('../middlewares/checkPermissions.js');
 
+function generateRandomCode () {
+  const min = 1000; 
+  const max = 9999; 
+  const code = Math.floor(Math.random() * (max - min + 1)) + min;
+  return code.toString(); 
+}
 
 //GET HUNTERS
 router.get('/', isAuthenticated, checkPermissions('hunters'), async (req, res) => {
@@ -18,8 +24,11 @@ router.get('/', isAuthenticated, checkPermissions('hunters'), async (req, res) =
 
 //NEW HUNTER
 router.post("/", isAuthenticated, checkPermissions('hunters'), async (req, res) => {
-  const { name, email, phonenumber, type, code } = req.body;
+  const { name, email, phonenumber, type } = req.body;
+  const code = generateRandomCode();
   const newHunter = new Hunter({ name, email, phonenumber, type, code });
+  
+
    try{
      const savedHunter = await newHunter.save(); 
       res.status(201).json(savedHunter);
