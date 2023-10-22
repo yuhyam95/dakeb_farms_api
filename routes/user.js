@@ -40,7 +40,7 @@ router.get('/', isAuthenticated, checkPermissions('users'), async (req, res) => 
 // CREATE A NEW USER
 router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) => {
   try {
-    const { name, email, salary, phonenumber, departmentId, positionId, roleId } = req.body;
+    const { name, email, salary, phonenumber, departmentId, positionId, roleId, status } = req.body;
 
     const department = await Department.findById(departmentId);
     const position = await Position.findById(positionId);
@@ -64,6 +64,7 @@ router.post('/', isAuthenticated, checkPermissions('users'), async (req, res) =>
         id: role._id,
         name: role.name
       },
+      status,
       password
     });
 
@@ -109,25 +110,11 @@ router.get('/:id', isAuthenticated, checkPermissions('users'), async (req, res) 
     }
   });
   
-  
-  //  //UPDATE USER
-  // router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) =>{
-  //   try{
-  //     const updateUser = await User.updateOne(
-  //       {_id: req.params.id}, 
-  //       {$set: req.body}
-  //     );
-  //     res.json(updateUser)
-  //   }
-  //   catch(err){
-  //     res.status(404).json("Error updating user")
-  //   }
-  // });
 
 // UPDATE USER
 router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) => {
   try {
-    const { name, email, salary, phonenumber, departmentId, positionId, roleId } = req.body;
+    const { name, email, salary, phonenumber, departmentId, positionId, roleId, status} = req.body;
 
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -165,10 +152,13 @@ router.put('/:id', isAuthenticated, checkPermissions('users'), async (req, res) 
     if (email) user.email = email;
     if (salary) user.salary = salary;
     if (phonenumber) user.phonenumber = phonenumber;
+    if (status !== undefined) {
+      user.status = status;
+    }
 
     await user.save();
 
-    res.json(user);
+    res.json("User updated successfully");
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error updating user' });
