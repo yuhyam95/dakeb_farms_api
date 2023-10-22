@@ -64,7 +64,10 @@ router.post('/login', (req, res, next) => {
       if (err) {
         return next(err);
       }
-
+       // Check the user's status
+      if (user.status !== true) {
+        return res.status(401).json({ message: 'Account is inactive' });
+      }
       const token = jwt.sign({ userId: user._id, role: user.role }, process.env.SECRET_KEY);
        // Include user details in the response
        const userDetails = {
